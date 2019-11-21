@@ -1,0 +1,82 @@
+##mongodb_connect remote server           https://medium.com/founding-ithaka/setting-up-and-connecting-to-a-remote-mongodb-database-5df754a4da89
+
+STEP-1.) MONGODB INSTALLTION:-
+----------------------------------------
+* sudo apt-get update
+
+* sudo apt-get install -y mongodb-org            ##{install latest version}
+
+* sudo apt install mongodb
+
+* sudo service mongod status
+
+* sudo systemctl enable mongod
+
+* sudo service mongod restart
+
+
+## CONFIGURE AND CONNECT MONGODB:-
+-------------------------------------------
+* mongo                  ##{type n get inside of mongodb shell/interface}
+
+* use admin           ##{create n switch to admindatabase}
+
+
+##Createing root user and role:-
+----------------------------------
+db.createUser(
+   {
+       user: "admin", 
+       pwd: "password", 
+       roles:["root"]
+   })
+
+* exit
+
+
+## Connecting_remote_Machine
+--------------------------------
+STEP 1.) ON MONGODB SERVER
+note{after setting up mongodb and creating admin or normal user and admin db, go through next command}
+
+* sudo vim /etc/mongod.conf
+
+* security:       #{uncommand and type below line}
+    authorization: 'enabled'
+
+
+# network interfaces       #{find this and change the bindip from localhost to anyone}
+net:
+    port: 27017
+    bindIp: 0.0.0.0   #default value is 127.0.0.1    #{save and exit}
+
+* sudo service mongod restart
+
+* mongo -u admin -p myadminpassword 127.0.0.1/admin      #{verify on mongo server}
+
+## ## {note :-ec2 >> security wizard >> inbound >> openport 27017      #{openport 27017}
+
+* sudo iptables -A INPUT -p tcp --destination-port 27017 -m state --state NEW,ESTABLISHED -j ACCEPT
+
+* sudo iptables -A OUTPUT  -p tcp --source-port 27017 -m state --state ESTABLISHED -j ACCEPT
+
+
+**STEP 2) ON REMOTE MACHINE
+
+* mongo -u admin -p password <your_mongoserver_ip>/admin
+                                                    |
+                                            authentication database
+
+
+_________________________________________________________________________________
+ERROR:- --------------------------
+https://gist.github.com/michaeltreat/d3bdc989b54cff969df86484e091fd0c
+
+https://forum.kodi.tv/showthread.php?tid=205363
+
+https://www.google.com/search?q=Malformed+entry+1+in+list+file+%2Fetc%2Fapt%2Fsources.list.d%2Fmongodb-org-3.4.list&rlz=1C1GIWA_enIN827IN827&oq=Malformed+entry+1+in+list+file+%2Fetc%2Fapt%2Fsources.list.d%2Fmongodb-org-3.4.list&aqs=chrome..69i57j0.1055j0j7&sourceid=chrome&ie=UTF-8
+------------------
+
+* error :- {failed to connect 127.0.0.1:27017 when deb fucntion is unknown}
+solution:- rm /usr/local/var/mongodb/mongod.lock  
+sudo service mongod restart
