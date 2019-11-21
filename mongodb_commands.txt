@@ -1,0 +1,37 @@
+mongo db commands
+
+* db       #{return currently selected db }
+
+* show dbs      #{list all default dbs }
+
+* db.getName()      #{name of current dabase }
+
+* db.dropDatabase()       #{delete the currently selected db}
+
+* use avenger       #{create new db named as avenger and switch to that}
+
+* db.createCollection('endgame')        #{creating new collection named as endgame}
+
+* db.stats()                #{detail of db}
+
+* db.endgame.insert({name:'hulk', weapon:'smash', color:'green'})           #{to insert an entry in collection}
+
+* db.endgame.count()        #{no. of object}
+
+* db.endgame.find()        #{display the collection's entry}
+
+* db.endgame.findOne()      #{gives the 1st entry}
+
+* db.endgame.deleteOne({name:'ironman'})        #t{to delete 1 entry}
+
+* db.endgame.deleteMany({name:'thor'})         #{to delete selective entry from all record}
+
+* db.endgame.deleteMany({})            #{to delete all entry records in collection}
+
+* .findOneAndDelete({query})	
+
+* .findOneAndUpdate({query}, {<update>}, {<options>}
+
+* .findOneAndReplace({query}, {<replacement>}, {<options>})
+
+update and rplace still remain
