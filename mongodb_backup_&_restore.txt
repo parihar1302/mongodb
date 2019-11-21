@@ -1,0 +1,16 @@
+STEP-5) MongoDB_DATABACK_&_RESTORE
+-----------------------------------------------------
+
+* mongodump  :- it will backup the entire data of your server and store on /bin/dump directory
+  location:- c:/monodb/bin/mongodump     
+
+* mongodump --host HOST_NAME --port PORT_NUMBER     {it will take the backup from all the database of the instance}
+
+* mongodump --dbpath DB_PATH --out BACKUP_DIRECTORY     {it will backup the specified database in specified path}
+
+* mongodump --collection COLLECTION --db DB_NAME         {it will backup the specified collection from specified database}
+
+
+## Restore the data backup
+------------------------------------
+* mongorestore              {it will restore the entire databack}

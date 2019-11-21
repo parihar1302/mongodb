@@ -73,6 +73,7 @@ Step-2.) Working with mongodb
 * db.dropDatabase()        {delete the current db}
 
 
+
 Step-3) Remotly coonect to mongodb server:-
 -----------------------------------------
 
