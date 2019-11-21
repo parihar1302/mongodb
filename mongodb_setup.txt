@@ -1,0 +1,133 @@
+# MongoDB on Ubuntu 18       https://tecadmin.net/tutorial/mongodb/query-document/
+________________________
+
+* sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 4B7C549A058F8B6B   {testing package before installing}
+
+* echo "deb [ arch=amd64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.2 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb.list       {adding APT repository}
+
+* sudo apt update
+
+* sudo apt install mongodb-org     {install mongodb}
+         OR
+* sudo apt install mongodb-org=4.2.1 mongodb-org-server=4.2.1 mongodb-org-shell=4.2.1 mongodb-org-mongos=4.2.1 mongodb-org-tools=4.2.1        {specific version}
+
+
+* sudo systemctl enable mongod       {enabling mongodb}
+
+* sudo systemctl start mongod      {starting mongodb}
+
+* sudo systemctl stop mongod        {stopping mongodb}
+
+* sudo systemctl restart mongod       {restarting mongodb}
+
+* mongod --version 
+
+
+Step-2.) Working with mongodb
+----------------------------
+
+* mongo    {go to mongodb shell}
+
+* db      {shows current db}
+
+* show dbs;     {list of all dbs}
+
+* use mydb;     {creating and switching on mydb} {without passing an documemt/record in mydb, u cn not see the mydb on the screen}
+
+* db.copyDatabase("mydb","newdb")           {renaming/coping db in same machine}
+
+
+* db.createCollection("mycollection")    {creating collection, named as mycollection}
+
+* show collections;     {list of all collections}
+
+* db.mycollection.renameCollection("testcollection")    {rename of collection}
+
+*                          {update document}
+
+* db.testcollection.drop();      {delete collection}
+       OR
+  db.getCollection("testcollection").drop();    
+
+* db.testcollection.insert({name:'thor', weapon:'hammer', color:'green'})       {inserting documents in key and value }
+
+
+* db.testcollection.find();       {search complete document}
+
+* db.testcollection.find({name:"thor"});     {searching perticular document}
+
+* db.mycoll.remove({name:"thor"})        {remove/delete thor full document from collection}
+
+*                         {remove thor's specific document }
+
+*                        {remove all document}
+
+* db.mycoll.count();      {to count number of document}
+
+
+** db.copyDatabase("olddb","newdb")       {coping/renaming the db in same machine}
+   
+** db.copyDatabase("remote_dbname","local_dbname","10.8.0.2","username","password")     {copying database from remote machine to local machine}
+
+
+* db.dropDatabase()        {delete the current db}
+
+
+Step-3) Remotly coonect to mongodb server:-
+-----------------------------------------
+
+* mongo --host 10.10.8.1 --port 27017      {port num can be varried}
+
+
+
+Step-4) CONFIGURE AND CONNECT MONGODB DATABASE:-
+-------------------------------------------
+* mongo                  ##{type n get inside of mongodb shell/interface}
+
+* use admin           ##{create n switch to admindatabase}
+
+
+##Createing root user and role:-
+----------------------------------
+db.createUser(
+   {
+       user: "admin", 
+       pwd: "password", 
+       roles:["root"]
+   })
+
+* exit
+
+
+## Connecting_remote_Machine
+--------------------------------
+#.) ON MONGODB SERVER
+note{after setting up mongodb and creating admin or normal user and admin db, go through next command}
+
+* sudo vim /etc/mongod.conf
+
+* security:       #{uncommand and type below line}
+    authorization: 'enabled'
+
+
+# network interfaces       #{find this and change the bindip from localhost to anyone}
+net:
+    port: 27017
+    bindIp: 0.0.0.0   #default value is 127.0.0.1    #{save and exit}
+
+* sudo service mongod restart
+
+* mongo -u admin -p myadminpassword 127.0.0.1/admin      #{verify on mongo server}
+
+## ## {note :-ec2 >> security wizard >> inbound >> openport 27017      #{openport 27017}
+
+* sudo iptables -A INPUT -p tcp --destination-port 27017 -m state --state NEW,ESTABLISHED -j ACCEPT
+
+* sudo iptables -A OUTPUT  -p tcp --source-port 27017 -m state --state ESTABLISHED -j ACCEPT
+
+
+*.) ON REMOTE MACHINE
+-----------------------------------
+* mongo -u admin -p password <your_mongoserver_ip>/admin
+                                                    |
+                                            authentication database
